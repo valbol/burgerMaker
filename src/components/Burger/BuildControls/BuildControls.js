@@ -23,7 +23,8 @@ const BuildControls = (porps) => (
         ))}
         <button 
         className={classes.OrderButton}
-        disabled={!porps.purchasable}>ORDER NOW</button>
+        disabled={!porps.purchasable}
+        onClick={porps.ordered}>ORDER NOW</button>
     </div>
 );
 
