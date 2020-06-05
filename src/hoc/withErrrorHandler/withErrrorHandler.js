@@ -9,15 +9,21 @@ const withErrrorHandler = (WrappedComponent, axios) => {
         state = {
             error: null
         }
-        componentDidMount() {
-            axios.interceptors.request.use(req => {
+        componentWillMount() {
+            this.reqInterceptoes = axios.interceptors.request.use(req => {
                 this.setState({ error: null });
                 return req;
             })
-            axios.interceptors.response.use(res => res, err => {
+            this.resInterceptoes =axios.interceptors.response.use(res => res, err => {
                 console.log(err);
                 this.setState({ error: err });
             });
+        }
+        //To prevent memory leaks, as otherwise we are munting the above function each time when we use the HOC, but we need only once
+        componentWillUnmount(){
+            console.log('Will unmount', this.reqInterceptoes, this.resInterceptoes)
+            axios.interceptors.request.eject(this.reqInterceptoes);
+            axios.interceptors.response.eject(this.resInterceptoes);
         }
 
         errorConfirmedHandler = () => {
